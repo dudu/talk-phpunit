@@ -6,6 +6,13 @@ use MyApp\Example\Calculator;
 
 class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
+    protected $calculator;
+
+    public function setup()
+    {
+        $this->calculator = new Calculator();
+    }
+
     public function balanceProvider()
     {
         return [
@@ -36,8 +43,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $bankAccountB->method('getBalance')->willReturn($balanceAccountB);
 
-        $calculator = new Calculator;
-        $sum = $calculator->sum($bankAccountA, $bankAccountB);
+        $sum = $this->calculator->sum($bankAccountA, $bankAccountB);
 
         $this->assertEquals($balanceTotal, $sum);
     }
@@ -58,7 +64,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $bankAccountB->method('getType')->willReturn('J');
 
-        $calculator = new Calculator;
-        $sum = $calculator->sum($bankAccountA, $bankAccountB);
+        $sum = $this->calculator->sum($bankAccountA, $bankAccountB);
     }
 }
