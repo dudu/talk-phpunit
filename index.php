@@ -4,6 +4,9 @@ require 'vendor/autoload.php';
 
 $calculator = new \MyApp\Example\Calculator();
 
-$sum = $calculator->sum(1,2);
+$bankAccountA = new \MyApp\Example\BankAccount(123, 555, 'F');
+$bankAccountB = new \MyApp\Example\BankAccount(123, 666, 'F');
+
+$sum = $calculator->sum($bankAccountA, $bankAccountB);
 
 echo sprintf("O resultado da soma é: %d \n", $sum);
