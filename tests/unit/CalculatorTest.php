@@ -15,6 +15,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             [666, 666, 1332],
         ];
     }
+
     /**
      * @dataProvider balanceProvider
      */
@@ -39,5 +40,25 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $sum = $calculator->sum($bankAccountA, $bankAccountB);
 
         $this->assertEquals($balanceTotal, $sum);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testSumDifferentAccounts() {
+        $bankAccountA = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountA->method('getType')->willReturn('F');
+
+        $bankAccountB = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountB->method('getType')->willReturn('J');
+
+        $calculator = new Calculator;
+        $sum = $calculator->sum($bankAccountA, $bankAccountB);
     }
 }
