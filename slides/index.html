@@ -1,0 +1,914 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>PHPUnit Basic</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>PHPUnit Basics</h1>
+					<h2>Eduardo Nascimento</h2>
+				</section>
+				<section>
+					<section>
+						<h2>Install</h2>
+					</section>
+					<section>
+						<pre>
+							<code class="hljs bash" data-trim contenteditable>
+								composer require --dev "phpunit/phpunit"
+							</code>
+						</pre>
+					</section>
+					<section>
+						<p>5.7 => "php": "^5.6 || ^7.0"</p>
+						<p>4.8 => "php": ">=5.3.3"</p>
+					</section>
+				</section>
+                <section>
+                    <section>
+                        <h2>Config</h2>
+                    </section>
+    				<section>
+                        <pre><code class="hljs tag" data-trim contenteditable>
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit
+    bootstrap="./vendor/autoload.php"
+    colors="true"
+>
+    <testsuites>
+        <testsuite name="MyApp Example">
+            <directory suffix="Test.php">./tests/unit/</directory>
+            <exclude>vendor</exclude>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>./app</directory>
+            <exclude>
+                <directory>./tests/unit</directory>
+                <directory>./vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
+
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class="hljs json" data-trim contenteditable>
+{
+    "name": "MyApp/Example",
+    "authors": [
+        {
+            "name": "Eduardo Nascimnento",
+            "email": "eduardo@eduardonascimento.com.br"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {"MyApp\\Example\\": "app/"}
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MyApp\\ExampleTests\\": "tests/unit"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
+    }
+}
+
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class="hljs php" data-trim contenteditable>
+                            vendor/bin/phpunit
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Basic anatomy of a test</h2>
+                    </section>
+                    <section>
+                        <pre><code class="hljs php" data-trim contenteditable>
+class ClassNameTest extends \PHPUnit_Framework_TestCase
+{
+    public function testYourTest()
+    {
+        // Some operations
+        $this->assertSomething($value);
+
+        //ou
+        $this->assertSomething($expected, $value);
+    }
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class="hljs" data-trim>
+assertArrayHasKey()
+assertClassHasAttribute()
+assertArraySubset()
+assertClassHasStaticAttribute()
+assertContains()
+assertContainsOnly()
+assertContainsOnlyInstancesOf()
+assertCount()
+assertDirectoryExists()
+assertDirectoryIsReadable()
+assertDirectoryIsWritable()
+assertEmpty()
+assertEqualXMLStructure()
+assertEquals()
+assertFalse()
+assertFileEquals()
+assertFileExists()
+assertFileIsReadable()
+assertFileIsWritable()
+assertGreaterThan()
+assertGreaterThanOrEqual()
+assertInfinite()
+assertInstanceOf()
+assertInternalType()
+assertIsReadable()
+assertIsWritable()
+assertJsonFileEqualsJsonFile()
+assertJsonStringEqualsJsonFile()
+assertJsonStringEqualsJsonString()
+assertLessThan()
+assertLessThanOrEqual()
+assertNan()
+assertNull()
+assertObjectHasAttribute()
+assertRegExp()
+assertStringMatchesFormat()
+assertStringMatchesFormatFile()
+assertSame()
+assertStringEndsWith()
+assertStringEqualsFile()
+assertStringStartsWith()
+assertThat()
+assertTrue()
+assertXmlFileEqualsXmlFile()
+assertXmlStringEqualsXmlFile()
+assertXmlStringEqualsXmlString()
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>101</h2>
+                    </section>
+                    <section>
+                        <pre><code class="hljs php" data-trim contenteditable>
+// /index.php
+require 'vendor/autoload.php';
+
+$calculation = new \MyApp\Example\Calculation();
+
+$sum = $calculation->sum(1,2);
+
+echo sprintf("O resultado da soma é: %d \n", $sum);
+						</code></pre>
+					</section>
+<section>
+                        <pre><code class="hljs php" data-trim contenteditable>
+// /app/Calculator.php
+namespace MyApp\Example;
+
+class Calculation
+{
+    public function sum($a, $b)
+    {
+        return $a + $b;
+    }
+}
+                        </code></pre>
+                    </section>
+					<section>
+						<p>O resultado da soma é: 3</p>
+					</section>
+					<section>
+						<pre><code class="hljs php" data-trim contenteditable>
+// /tests/CalculatorTest.php
+namespace MyApp\ExampleTests;
+
+class CalculatorTest extends \PHPUnit_Framework_TestCase
+{
+    public function testSumValues()
+    {
+        $this->assertEquals(3, $sum);
+    }
+}
+
+						</code></pre>
+					</section>
+					<section>
+						<pre>
+                        <code class="hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+F
+
+Time: 38 ms, Memory: 4.00MB
+
+There was 1 failure:
+
+1) MyApp\Tests\CalculatorTest::testSumValues
+Failed asserting that null matches expected 3.
+
+/code/tests/CalculatorTest.php:9
+
+FAILURES!
+Tests: 1, Assertions: 1, Failures: 1.
+
+						</code></pre>
+					</section>
+					<section>
+						<pre><code class="hljs php" data-trim contenteditable>
+// /tests/CalculatorTest.php
+namespace MyApp\ExampleTest;
+
+use MyApp\Example\Calculator;
+
+class CalculatorTest extends \PHPUnit_Framework_TestCase
+{
+    public function testSumValues()
+    {
+        $calculator = new Calculator;
+        $sum = $calculator->sum(1,2);
+
+        $this->assertEquals(3, $sum);
+    }
+}
+						</code></pre>
+					</section>
+					<section>
+						<pre>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+.
+
+Time: 32 ms, Memory: 3.75MB
+
+OK (1 test, 1 assertion)
+
+						</pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>:/ and if ...</h2>
+					</section>
+					<section>
+						<pre><code class="hljs php" data-trim contenteditable>
+// /app/Calculator.php
+namespace MyApp\Example;
+
+class Calculator
+{
+    public function sum($a, $b)
+    {
+        return 3;
+    }
+}
+
+						</pre></code>
+					</section>
+					<section>
+						<pre>
+                        <code class="hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+.
+
+Time: 32 ms, Memory: 3.75MB
+
+OK (1 test, 1 assertion)
+						</code></pre>
+					</section>
+					<section>
+						<pre><code class="hljs php" data-trim contenteditable>
+// /tests/CalculatorTest.php
+namespace MyApp\ExampleTest;
+
+use MyApp\Example\Calculator;
+
+class CalculatorTest extends \PHPUnit_Framework_TestCase
+{
+    public function testSumValues()
+    {
+        $calculator = new Calculator;
+        $sum = $calculator->sum(1,2);
+
+        $this->assertEquals(3, $sum);
+    }
+
+    public function testSumTwoWithTwo()
+    {
+        $calculator = new Calculator;
+        $sum = $calculator->sum(2,2);
+
+        $this->assertEquals(4, $sum);
+    }
+}
+						</code></pre>
+					</section>
+					<section>
+					<pre>
+                    <code class="hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+.F
+
+Time: 42 ms, Memory: 4.25MB
+
+There was 1 failure:
+
+1) MyApp\ExampleTest\CalculatorTest::testOtherValues
+Failed asserting that 3 matches expected 4.
+
+/code/tests/unit/CalculatorTest.php:22
+
+FAILURES!
+Tests: 2, Assertions: 2, Failures: 1.
+                    </code>
+					</pre>
+					</section>
+					<section>
+                        <pre><code class="hljs php" data-trim contenteditable>
+// /app/Calculator.php
+namespace MyApp\Example;
+
+class Calculation
+{
+    public function sum($a, $b)
+    {
+        return $a + $b;
+    }
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                    <pre>
+                    <code class="hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+..
+
+Time: 40 ms, Memory: 4.00MB
+
+OK (2 tests, 2 assertions)
+                    </code>
+                    </pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Data Providers</h2>
+                    </section>
+                    <section>
+                        <pre><code class="hljs php" data-trim contenteditable>
+// /tests/unit/CalculatorTest.php
+namespace MyApp\ExampleTest;
+
+use MyApp\Example\Calculator;
+
+class CalculatorTest extends \PHPUnit_Framework_TestCase
+{
+    public function valuesProvider()
+    {
+        return [
+            [1, 2, 3],
+            [2, 2, 4],
+            [10, 20, 30],
+            [13, 37, 50],
+        ];
+    }
+
+    /**
+     * @dataProvider valuesProvider
+     */
+    public function testSumValues($valueA, $valueB, $total)
+    {
+        $calculator = new Calculator;
+        $sum = $calculator->sum($valueA, $valueB);
+
+        $this->assertEquals($total, $sum);
+    }
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre>
+                        <code class="hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+....
+
+Time: 37 ms, Memory: 4.00MB
+
+OK (4 tests, 4 assertions)
+                        </code>
+                        </pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Mocks</h2>
+                    </section>
+                    <section>
+                        <pre><code class="hljs php" data-trim contenteditable>
+// /index.php
+require 'vendor/autoload.php';
+
+$calculator = new \MyApp\Example\Calculator();
+
+$bankAccountA = new \MyApp\Example\BankAccount(123, 555, 'F');
+$bankAccountB = new \MyApp\Example\BankAccount(123, 666, 'F');
+
+$sum = $calculator->sum($bankAccountA, $bankAccountB);
+
+echo sprintf("O resultado da soma é: %d \n", $sum);
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class="hljs php" data-trim contenteditable>
+// /app/BankAccount.php
+namespace MyApp\Example;
+
+class BankAccount
+{
+    protected $customerId;
+
+    protected $balance;
+
+    protected $type;
+
+    public __construct($customerId, $balance, $type)
+    {
+        $this->customerId = $customerId;
+        $this->balance    = $balance;
+        $this->type       = $type;
+    }
+
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class="hljs php" data-trim contenteditable>
+// /app/Calculator.php
+namespace MyApp\Example;
+
+class Calculator
+{
+    public function sum(BankAccount $bankAccountA, BankAccount $bankAccountB)
+    {
+        return $bankAccountA->getBalance() + $bankAccountB->getBalance();
+    }
+}
+
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre>
+O resultado da soma é: 1221
+                        </pre>
+                    </section>
+                    <section>
+                    <pre>
+                    <code class="hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+EEEE
+
+Time: 274 ms, Memory: 4.00MB
+
+There were 4 errors:
+
+1) MyApp\ExampleTest\CalculatorTest::testSumValues with data set #0 (1, 2, 3)
+Argument 1 passed to MyApp\Example\Calculator::sum() must be an instance of MyApp\Example\BankAccount, integer given, called in /code/tests/unit/CalculatorTest.php on line 25 and defined
+
+/code/app/Calculator.php:7
+/code/tests/unit/CalculatorTest.php:25
+
+2) MyApp\ExampleTest\CalculatorTest::testSumValues with data set #1 (2, 2, 4)
+Argument 1 passed to MyApp\Example\Calculator::sum() must be an instance of MyApp\Example\BankAccount, integer given, called in /code/tests/unit/CalculatorTest.php on line 25 and defined
+
+/code/app/Calculator.php:7
+/code/tests/unit/CalculatorTest.php:25
+
+3) MyApp\ExampleTest\CalculatorTest::testSumValues with data set #2 (10, 20, 30)
+Argument 1 passed to MyApp\Example\Calculator::sum() must be an instance of MyApp\Example\BankAccount, integer given, called in /code/tests/unit/CalculatorTest.php on line 25 and defined
+
+/code/app/Calculator.php:7
+/code/tests/unit/CalculatorTest.php:25
+
+4) MyApp\ExampleTest\CalculatorTest::testSumValues with data set #3 (13, 37, 50)
+Argument 1 passed to MyApp\Example\Calculator::sum() must be an instance of MyApp\Example\BankAccount, integer given, called in /code/tests/unit/CalculatorTest.php on line 25 and defined
+
+/code/app/Calculator.php:7
+/code/tests/unit/CalculatorTest.php:25
+
+FAILURES!
+Tests: 4, Assertions: 0, Errors: 4.
+</code></pre>
+                    </section>
+                    <section>
+						<pre><code class="hljs php" data-trim contenteditable>
+// /tests/unit/CalculatorTest.php
+namespace MyApp\ExampleTest;
+
+use MyApp\Example\Calculator;
+
+class CalculatorTest extends \PHPUnit_Framework_TestCase
+{
+    public function testSumValues()
+    {
+        $bankAccountA = new \MyApp\Example\BankAccount(123, 555, 'F');
+        $bankAccountB = new \MyApp\Example\BankAccount(123, 666, 'F');
+
+        $calculator = new Calculator;
+        $sum = $calculator->sum($bankAccountA, $bankAccountB);
+
+        $this->assertEquals(1221, $sum);
+    }
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class= "hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+.
+
+Time: 35 ms, Memory: 4.00MB
+
+OK (1 test, 1 assertion)
+
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class= "hljs php" data-trim contenteditable>
+// /tests/unit/CalculatorTest.php
+namespace MyApp\ExampleTest;
+
+use MyApp\Example\Calculator;
+
+class CalculatorTest extends \PHPUnit_Framework_TestCase
+{
+    public function balanceProvider()
+    {
+        return [
+            [100, 200, 300],
+            [500, 300, 800],
+            [123, 456, 579],
+            [666, 666, 1332],
+        ];
+    }
+    /**
+     * @dataProvider balanceProvider
+     */
+    public function testSumValues(
+        $balanceAccountA,
+        $balanceAccountB,
+        $balanceTotal
+    ) {
+        $bankAccountA = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountA->method('getBalance')->willReturn($balanceAccountA);
+
+        $bankAccountB = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountB->method('getBalance')->willReturn($balanceAccountB);
+
+        $calculator = new Calculator;
+        $sum = $calculator->sum($bankAccountA, $bankAccountB);
+
+        $this->assertEquals($balanceTotal, $sum);
+    }
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class= "hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+....
+
+Time: 40 ms, Memory: 4.25MB
+
+OK (4 tests, 4 assertions)
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Exceptions</h2>
+                    </section>
+                    <section>
+                        <pre><code class= "hljs php" data-trim contenteditable>
+// /app/Calculator.php
+namespace MyApp\Example;
+
+class Calculator
+{
+    public function sum(BankAccount $bankAccountA, BankAccount $bankAccountB)
+    {
+        if ($bankAccountA->getType() != $bankAccountB->getType())
+        {
+            throw new \Exception(
+                "Accounts with different type aren't summable",
+                1
+            );
+        }
+
+        return $bankAccountA->getBalance() + $bankAccountB->getBalance();
+    }
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class= "hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+....
+
+Time: 67 ms, Memory: 4.25MB
+
+OK (4 tests, 4 assertions)
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class= "hljs php" data-trim contenteditable>
+// /tests/unit/CalculatorTest.php
+use MyApp\Example\Calculator;
+
+class CalculatorTest extends \PHPUnit_Framework_TestCase
+{
+    public function balanceProvider()
+    {
+        return [
+            [100, 200, 300],
+            [500, 300, 800],
+            [123, 456, 579],
+            [666, 666, 1332],
+        ];
+    }
+
+    /**
+     * @dataProvider balanceProvider
+     */
+    public function testSumValues(
+        $balanceAccountA,
+        $balanceAccountB,
+        $balanceTotal
+    ) {
+        $bankAccountA = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountA->method('getBalance')->willReturn($balanceAccountA);
+
+        $bankAccountB = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountB->method('getBalance')->willReturn($balanceAccountB);
+
+        $calculator = new Calculator;
+        $sum = $calculator->sum($bankAccountA, $bankAccountB);
+
+        $this->assertEquals($balanceTotal, $sum);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testSumDifferentAccounts() {
+        $bankAccountA = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountA->method('getType')->willReturn('F');
+
+        $bankAccountB = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountB->method('getType')->willReturn('J');
+
+        $calculator = new Calculator;
+        $sum = $calculator->sum($bankAccountA, $bankAccountB);
+    }
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class= "hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+.....
+
+Time: 67 ms, Memory: 4.25MB
+
+OK (5 tests, 5 assertions)
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Setup</h2>
+                    </section>
+                    <section>
+                        <pre><code class= "hljs php" data-trim contenteditable>
+// /tests/unit/CalculatorTest.php
+namespace MyApp\ExampleTest;
+
+use MyApp\Example\Calculator;
+
+class CalculatorTest extends \PHPUnit_Framework_TestCase
+{
+    protected $calculator;
+
+    public function setup()
+    {
+        $this->calculator = new Calculator();
+    }
+
+    public function balanceProvider()
+    {
+        return [
+            [100, 200, 300],
+            [500, 300, 800],
+            [123, 456, 579],
+            [666, 666, 1332],
+        ];
+    }
+
+    /**
+     * @dataProvider balanceProvider
+     */
+    public function testSumValues(
+        $balanceAccountA,
+        $balanceAccountB,
+        $balanceTotal
+    ) {
+        $bankAccountA = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountA->method('getBalance')->willReturn($balanceAccountA);
+
+        $bankAccountB = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountB->method('getBalance')->willReturn($balanceAccountB);
+
+        $sum = $this->calculator->fam_suspend_monitor(fam, fam_monitor)($bankAccountA, $bankAccountB);
+
+        $this->assertEquals($balanceTotal, $sum);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testSumDifferentAccounts() {
+        $bankAccountA = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountA->method('getType')->willReturn('F');
+
+        $bankAccountB = $this->getMockBuilder('\MyApp\Example\BankAccount')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $bankAccountB->method('getType')->willReturn('J');
+
+        $sum = $this->calculator->fam_suspend_monitor(fam, fam_monitor)($bankAccountA, $bankAccountB);
+    }
+}
+
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class= "hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+.....
+
+Time: 67 ms, Memory: 4.25MB
+
+OK (5 tests, 5 assertions)
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Coverage</h2>
+                    </section>
+                    <section>
+                        <pre>vendor/bin/phpunit --coverage-text</pre>
+                    </section>
+                    <section>
+                        <pre><code class= "hljs" data-trim contenteditable>
+PHPUnit 4.8.34 by Sebastian Bergmann and contributors.
+
+.....
+
+Time: 251 ms, Memory: 7.50MB
+
+OK (5 tests, 5 assertions)
+
+
+Code Coverage Report:   
+  2017-02-03 12:50:10   
+                        
+ Summary:               
+  Classes: 50.00% (1/2) 
+  Methods: 20.00% (1/5) 
+  Lines:   46.15% (6/13)
+
+\MyApp\Example::Calculator
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  6/  6)
+
+                        </code></pre>
+                    </section>
+                    <section>
+                    <pre>
+--coverage-clover
+--coverage-crap4j
+--coverage-html
+--coverage-php
+--coverage-text
+--coverage-xml
+                    </pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>Thanks</h2>
+                    <h4>https://github.com/xduh</h4>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
